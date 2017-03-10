@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body ng-init="title='hello title';hello='hello angular';world='angular world!'">
+
+
+<!--
+       为避免在使用ng-init初始化变量过于臃肿的情况,引入module模块
+
+-->
+<!--在一个页面中可以存在多个ng-app指令，通过指定他的值，可以看成id="myNgapp"-->
+<div ng-app="myNgapp">
+
+</div>
+
+
+<!--
+这行代码载入angular.js脚本，当浏览器将整个HTML页面载入完毕后将会执行该angular.js脚本，
+angular.js脚本运行后将会寻找含有ng-app指令的HTML标签，该标签即定义了AngularJS应用的作用域。
+-->
+<script src="js/angular.min.js"></script>
+<script>
+    /*
+     * 注意在angular.module中，module两个参数
+     * 第一个参数 myNgapp是指定的ng-app指令
+     * []第二个参数为集合参数，就算没有集合，也必须传入一个空数组，不然会报错
+     * */
+    var app = angular.module("myNgapp", []);
+    console.log(app);
+    /*
+     * configBlocks:Array[0]
+     _invokeQueue:Array[0]
+     _runBlocks:Array[0]
+     animation:(b,e)
+     component:(b,e)
+     config:()
+     constant:()
+     controller:(b,e)
+     decorator:(b,e)
+     directive:(b,e)
+     factory:(b,e)
+     filter:(b,e)
+     name:"myNgapp"
+     provider:(b,e)
+     requires:Array[0]
+     run:(a)
+     service:(b,e)
+     value:()
+     __proto__:Object
+     这个就是 angular中 Object对象中的一些属性
+     *
+     * */
+</script>
+</body>
+</html>
