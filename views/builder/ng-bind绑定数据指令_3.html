@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body ng-init="title='欢迎来到Angular js!';hello='angular!'">
+
+<h1>第一种方式通过{{}}双括号来获取:{{title}}</h1>
+<h1>hello:{{hello}}</h1>
+<!--
+    这种方式的不足之处是在页面刷新的时候，会显示hello变量的加载{{}}双括号
+    为体验效果更好的显示，我们可以通过指令ng-bind
+-->
+
+<h1>通过ng-bind指令来获取数据:<span ng-bind="hello"></span></h1>
+
+<!--
+这行代码载入angular.js脚本，当浏览器将整个HTML页面载入完毕后将会执行该angular.js脚本，
+angular.js脚本运行后将会寻找含有ng-app指令的HTML标签，该标签即定义了AngularJS应用的作用域。
+-->
+<script src="js/angular.min.js"></script>
+</body>
+</html>
