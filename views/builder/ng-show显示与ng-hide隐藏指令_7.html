@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+
+
+<div ng-app="btnApp" ng-controller="main">
+    <button ng-click="isShowClick(true)">商品详情</button>
+    <button ng-click="isShowClick(false)">商品评论</button>
+    <h1 ng-show="isShow">
+        商品:玻璃杯
+        易碎品，请妥善保管
+    </h1>
+    <h1 ng-hide="isShow">
+        评论区：
+        这个玻璃杯还可以，挺好看
+    </h1>
+</div>
+
+<!--
+这行代码载入angular.js脚本，当浏览器将整个HTML页面载入完毕后将会执行该angular.js脚本，
+angular.js脚本运行后将会寻找含有ng-app指令的HTML标签，该标签即定义了AngularJS应用的作用域。
+-->
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("btnApp", [])
+        .controller("main", function ($scope) {
+            $scope.isShowClick = function (isShow) {
+                $scope.isShow = isShow;
+            }
+        });
+</script>
+</body>
+</html>
