@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--此处ng-app的作用域是整个html容器内-->
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body ng-app="body">
+<!--该ng-app作用域在div容器内-->
+<div>
+    <div class="main" ng-controller="main">
+        <input class="form-control" ng-model="msg" placeholder="请输入你的内容"/>
+        你输入的结果<h1><span ng-bind="msg"></span></h1>
+
+        <br/>
+        获取ng-controller中指令的自定义变量值:{{myvar}}
+    </div>
+</div>
+
+<!--
+这行代码载入angular.js脚本，当浏览器将整个HTML页面载入完毕后将会执行该angular.js脚本，
+angular.js脚本运行后将会寻找含有ng-app指令的HTML标签，该标签即定义了AngularJS应用的作用域。
+-->
+<script src="js/angular.min.js"></script>
+<script>
+    //获取angluar中ng-app的作用域，返回的是angular的对象
+    var app = angular.module('body', []);
+
+    //调用controller方法，main为我们定义的controller,$scope用于来操作变量
+    app.controller("main", function ($scope) {
+        //通过$scope来定义变量,myvar
+        $scope.myvar = "在controller自定义变量myvar";
+        //通过$scope来操作页面的变量值
+        $scope.msg = "通过作用于$scope改变msg的值";
+
+    })
+</script>
+
+</body>
+</html>
