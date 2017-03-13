@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+<!--获取controller中的colors数组变量中的值-->
+<div ng-app="app" ng-controller="main" class="main">
+    <!--用ng-bind指令获取变量数组的值，这里是通过ng-click来定义鼠标的单击事件-->
+    <button ng-bind="colors[0]" ng-click="redClick()"></button>
+    <!--通过{{}}来获取数组变量中的值,这里的greenClick($event)我们是传递了btn的事件-->
+    <button ng-click="greenClick($event)">{{colors[1]}}</button>
+    <!--这里blueClick(colors[2]) 因为实在js环境中我们可以直接访问它的变量 colors这个颜色数字变量，获取第三个元素就是colors[2]-->
+    <button ng-click="blueClick(colors[2])">{{colors[2]}}</button>
+    <br/>
+    获取button单击事件的值:<h1 ng-bind="value"></h1>
+</div>
+
+
+<!--
+这行代码载入angular.js脚本，当浏览器将整个HTML页面载入完毕后将会执行该angular.js脚本，
+angular.js脚本运行后将会寻找含有ng-app指令的HTML标签，该标签即定义了AngularJS应用的作用域。
+-->
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("app", [])
+        .controller("main", function ($scope) {
+            //定义一个colors颜色数组
+            $scope.colors = ['red', 'green', 'blue'];
+            //定义btnClick事件
+            $scope.redClick = function () {
+                //此处我们可以通过this来进行获取生命变量。
+                //this.value="red";
+                //推荐使用,这里是直接注入到$scope作用域中
+                $scope.value = "red";
+                //查看this的
+                console.log(this);
+                //查看arguments参数列表
+                console.log(arguments.length);
+
+                /*
+                 *
+                 * $$ChildScope:null
+                 $$childHead:null
+                 $$childTail: null
+                 $$listenerCount :Object
+                 $$listeners:Object
+                 $$nextSibling:null
+                 $$prevSibling:null
+                 $$watchers:Array[4]
+                 $$watchersCount:4
+                 $id:2
+                 $parent:m
+                 btnClick:()
+                 colors:Array[3]
+                 0:"red"
+                 1:"green"
+                 2:"blue"
+                 length:3
+                 __proto__:Array[0]
+                 value:"red"
+                 __proto__:m
+                 * */
+            }
+
+            //通过事件传递
+            $scope.greenClick = function (e) {
+                //在控制台中我们可以看传入的e的事件参数列表
+                console.log(e);
+                $scope.value = e.target.innerHTML;
+            }
+
+            $scope.blueClick = function (value) {
+                $scope.value = value;
+            }
+
+        })
+</script>
+</body>
+</html>
