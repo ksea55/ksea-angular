@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+<!--根据自己的过滤需求，定义自己的过滤器-->
+<div id="definedFilterApp" ng-app="definedFilterApp" ng-controller="definedFilterController">
+    <input ng-model="msg" placeholder="请输入你的内容"/>
+    <h1>{{msg | definedFilter:true}}</h1><!--双向绑定数据-->
+    <h1>{{msg | definedFilter | lowercase}}</h1><!--过滤之间的多重使用-->
+</div>
+
+
+<!--
+这行代码载入angular.js脚本，当浏览器将整个HTML页面载入完毕后将会执行该angular.js脚本，
+angular.js脚本运行后将会寻找含有ng-app指令的HTML标签，该标签即定义了AngularJS应用的作用域。
+-->
+<script src="js/angular.min.js"></script>
+<script>
+    //装载应用程序
+    var app = angular.module("definedFilterApp", []);
+
+    //定义作用域
+
+    app.controller("definedFilterController", function ($scope) {
+        $scope.msg = "ksea";
+    })
+
+    /*自定义过滤器
+     * 第一个参数指定过滤器名称:definedFilter
+     * 第二个参数是指过滤器的工厂方法
+     * 第三过滤器必须有返回值
+     *             该返回值必须是一个函数，返回的这个才是我们正在的过滤器，过滤代码就写在此处
+     * */
+
+    app.filter("definedFilter", function () {
+        console.log(this);//在控制台中观察filter中的作用域
+        console.log(arguments);//在控制台中观察filter中的参数列表
+
+
+        return function (srcData, isFirstUpperCase) {
+            /*  console.log(222, arguments);
+             * 通过控制台查看到,这里的参数是要过滤的数据
+             * 在arguments参数列表中第一个参数是数据源也就是要过滤的数据
+             * 第二参数开始表示使用过滤器传递的参数
+             * */
+            console.log(222, arguments);
+            console.log(22, this);  //通过控制台查看到，this的作用域是全局作用域就是window
+            //console.log(srcData); //这里打印的就是input的内容,与arguments参数列表中的第一个参数是一致的
+
+
+            /*
+             * 案例1：在input输入框中输入abc_edf-bdfs之类的字符串过滤成abcEdfBdfs
+             * */
+            //isFirstUpperCase表示自定义过滤器的参数
+            if (isFirstUpperCase && srcData) { //表示过滤器true并且数据源长度>0
+                srcData = srcData[0].toUpperCase() + srcData.slice(1);
+            }
+            /*g修饰符代表全局匹配，查找所有匹配而非在找到第一个匹配后停止。*/
+            return srcData.replace(/[\-|_]([a-z])/g, function (match, obj) {
+                /*
+                 * 从打印的结果来看
+                 * abc_ab 当input输入这样的数据的时候控制台信息如下
+                 *  -s::::match
+                 s:::::obj
+                 * */
+                console.log(match + "::::match");
+                console.log(obj + ":::::obj");
+                return obj.toUpperCase();
+            })
+
+
+        }
+    })
+
+</script>
+
+</body>
+</html>
