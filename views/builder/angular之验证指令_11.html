@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+当为表单元素form添加name属性的时候，会根据这个name属性在作用于中创建一个变量
+表单元素form元素里面的字表单元素(如input、select、textarea等)的name属性
+会作为变量添加到form元素对应的变量内
+
+没一个变量都有4个属性:
+
+$dirty:表示是否输入过
+true:表示输入过
+false:表示未输入过
+
+$pristine:表示是否没有输入过
+true:表示没有输入过
+false:表示输入过
+
+$invalid:表示是否是不合法的
+true:表示不合法
+false:表示合法
+
+$valid:表示是否是合法的
+true:表示合法
+false:表示不合法
+
+ng-required="true" 验证必填项
+ ng-minlength="2" 最小长度2
+ng-maxlength="6" 最大长度6
+ng-pattern="/[0-9]{2,6}/" 正则表达式匹配
+
+<form name="myform" class="form-horizontal">
+    用户名:<input name="username" id="username" ng-model="username" placeholder="请输入用户名" class="form-control"
+               ng-required="true"/>
+    <!-- myform.username.$invalid 这里都是用name的属性  -->
+    <span ng-show="myform.username.$invalid">用户名不能为空!</span><br/>
+
+
+    密码:<input name="userPwd" id="userPwd" placeholder="请输入密码"
+              class="form-control" ng-required="true" ng-minlength="2" ng-maxlength="6" ng-pattern="/[0-9]{2,6}/"/>
+
+    <span ng-show="myform.userPwd.$invalid">密码不能为空并且密码长度为3-6位</span>
+
+    <input type="submit" class="btn btn-info" value="保 存"/>
+</form>
+
+
+<script src="js/angular.min.js"></script>
+</body>
+</html>
