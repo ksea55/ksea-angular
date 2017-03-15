@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+/*
+过滤器（filter）正如其名，作用就是接收一个输入，通过某个规则进行处理，然后返回处理后的结果。
+主要用在数据的格式化上，例如获取一个数组中的子集，对数组中的元素进行排序等。
+ng内置了一些过滤器，它们是：
+currency(货币)、
+date(日期)、
+filter(子串匹配)、
+json(格式化json对象)、
+limitTo(限制个数)、
+lowercase(小写)、
+uppercase(大写)、
+number(数字)、
+orderBy(排序)。
+总共九种。除此之外还可以自定义过滤器，这个就强大了，可以满足任何要求的数据处理。
+*/
+
+
+第一种过滤器 json过滤器 ->json(格式化json对象)
+
+json过滤器可以把一个js对象格式化为json字符串，没有参数。
+官网说它可以用来进行调试，嗯，是个不错的选择。
+或者，也可以用在js中使用，作用就和我们熟悉的JSON.stringify()一样。
+过滤器用法 :{{ jsonTest | json}}
+
+<div ng-app="jsonApp" ng-controller="jsonController" class="main">
+    {{jsonObj | json }}
+    <!--
+        运行结果:
+        { "order": "1223", "customr": "322", "billInfo": [ { "name": "sss" }, { "price": 23 } ] }
+    -->
+
+</div>
+
+
+第二种 currency (货币过滤器)
+
+使用currency可以将数字格式化为货币，默认是美元符号，你可以自己传入所需的符号，例如我传入人民币：
+{{num | currency : '￥'}}
+
+
+<div id="currencyApp" ng-app="currencyApp" ng-controller="currencyController" class="main">
+    <!--默认是美元符号并且是保留2位 运行结果::$23.02  -->
+    currency货币过滤器默认:{{price | currency}}
+    <!--currency:后面第一个参数为自定义货币符号,运行结果:人民币￥：23.02-->
+    自定义符号货币符号:{{price | currency:"人民币￥："}}
+
+
+    <!--货币过滤器第二个参数为保留几位小数-->
+    保留1为小数: {{price | currency:"人民币￥：":1}} <!--运行结果:：23.0 -->
+    {{price | currency:"人民币￥：":2}}<!--运行结果:：人民币￥：23.02 -->
+    {{price | currency:"人民币￥：":3}}<!--运行结果:：人民币￥：23.023 -->
+    {{price | currency:"人民币￥：":4}}<!--运行结果:：人民币￥：23.0230 -->
+    {{price | currency:"人民币￥：":5}}<!--运行结果:： 人民币￥：23.02300-->
+
+
+</div>
+
+
+<div id="dateApp" ng-app="dateApp" ng-controller="dateController" class="main">
+    第三种Date(时间过滤器)
+    原生的js对日期的格式化能力有限，ng提供的date过滤器基本可以满足一般的格式化要求。用法如下：
+    {{date | date : 'yyyy-MM-dd hh:mm:ss EEEE'}}
+    参数用来指定所要的格式，y M d h m s E 分别表示 年 月 日 时 分 秒 星期
+    <!--运行结果："2017-03-13T09:59:04.781Z"-->
+    默认显示时间: {{nowDate}}
+    <!--运行结果:2017-03-13 18:01:33-->
+    yyyy-MM-dd HH:mm:ss时间格式化:{{nowDate | date:'yyyy-MM-dd HH:mm:ss'}}
+    <!--运行结果: 2017-03-13 18:02:48 Monday 其中EEEE表示星期几-->
+    {{nowDate | date:'yyyy-MM-dd HH:mm:ss EEEE'}}
+    <!--运行结果:2017-03-13 18:02:48:803 其中sss表示毫秒-->
+    {{nowDate | date:'yyyy-MM-dd HH:mm:ss:sss'}}
+
+</div>
+
+
+<div id="filterApp" ng-app="filterApp" ng-controller="filterController" class="main">
+    第四种Filter(Filter过滤器)
+
+    用来处理一个数组，然后可以过滤出含有某个子串的元素，作为一个子数组来返回。
+    可以是字符串数组，也可以是对象数组。如果是对象数组，可以匹配属性的值。
+    它接收一个参数，用来定义子串的匹配规则
+
+    <!--
+       原始数组: ["pink", "yellow", "blue", "orange", "grenn", "red"];
+    -->
+
+
+    过滤包含o的颜色:{{colors | filter:"o"}} <!--运行结果:["yellow","orange"] 就只会返回包含o的颜色的字符串数组-->
+    在作用域中声明需过滤的变来来进行过滤:{{colors | filter:key}} <!--此处key，是我们定义在作用域controller的需过滤的key，运行结果：["orange","grenn","red"]-->
+    根据定义的函数方式来进行过滤:{{colors | filter:myFilter}}<!--运行结果：["yellow"] 过滤不是已o开头的颜色-->
+
+</div>
+
+
+<div id="strApp" ng-app="strAPP" ng-controller="strController" class="main">
+    第五种字符串过滤器(lowercase与uppercase)
+    lowercase将字符串全部转换成小写
+    uppercase将字符串全部转换成大写
+
+    <!--
+        在作用域中定义的原始字符串:Hello Wrold
+    -->
+    lowercase过滤器:{{msg | lowercase}} <!--运行结果:hello wrold 全部小写-->
+    uppercase过滤器:{{msg | uppercase}}<!--运行结果：HELLO WROLD 全部大写-->
+
+</div>
+
+
+<div id="limitToApp" ng-app="limitToApp" ng-controller="limitToController">
+    第六种过滤器字符串或数组截取
+    该过滤器与原生js中的substring功能一致
+
+    <!--
+        在作用域中声明变量 $scope.msg = "hello world";
+    -->
+    用原生js的substring进行截取:{{msg.substring(2)}} <!--运行结果:llo world 意思是说从第二个开始进行截取-->
+    用angular的limitTo进行过滤:{{msg | limitTo:2 }} <!--运行结果:he 表示从头开始依次截取2位-->
+
+    用原生js的substring进行截取:{{msg.substring(2,4)}} <!--运行结果:ll 意思是截取2到4之间的数据，包括2的数据，不包括4的数据也就是包前不包后-->
+    用angular的limitTo进行过滤:{{msg | limitTo:2 : 3}} <!--运行结果:lo 表示从第3位开始截取2位-->
+
+    以上是字符串的截取，其数组的截取一样
+
+</div>
+
+<div id="numberApp" ng-app="numberApp" ng-controller="numberController" class="main">
+    第七种: 数字过滤器:number
+    主要是将数字进行格式化，方便阅读
+    <!--
+        定义的原始数据：$scope.num = 10000000.1286554321;
+    -->
+    使用number数字过滤器:{{num | number}} <!--运行结果:10,000,000.129 默认保留三位小数，并对最后一位进行四舍五入-->
+    使用number数字过滤器自定义保留小数位数:{{num | number:4}}<!--运行结果:10,000,000.1287 保留4位小数，并对最后一位进行四舍五入-->
+
+</div>
+
+<div id="orderByApp" ng-app="orderByApp" ng-controller="orderByController" class="main">
+    第八种:orderBy排序过滤器
+
+    orderBy过滤器可以将一个数组中的元素进行排序，接收一个参数来指定排序规则，
+    参数可以是一个字符串，表示以该属性名称进行排序。可以是一个函数，定义排序属性。
+    还可以是一个数组，表示依次按数组中的属性值进行排序（若按第一项比较的值相等，再按第二项比较）
+
+
+    <!--
+        原始数据:
+     $scope.students = [
+            {name: "Mexican", age: 33},
+            {name: "Jacky", age: 21},
+            {name: "Whysea", age: 12},
+            {name: "Ksea", age: 18},
+            {name: "Mexican", age: 25},
+            {name: "Fuck", age: 33},
+            {name: "Joker", age: 22},
+            {name: "Moxixi", age: 12}
+        ]
+    -->
+
+    使用orderBy过滤器默认排序:{{ students | orderBy:'age' }}
+    <!--
+        运行结果:
+        :[
+            {"name":"Whysea","age":12},
+            {"name":"Moxixi","age":12},
+            {"name":"Ksea","age":18},
+            {"name":"Jacky","age":21},
+            {"name":"Joker","age":22},
+            {"name":"Mexican","age":25},
+            {"name":"Mexican","age":33},
+            {"name":"Fuck","age":33}
+            ]
+            这里我们可以看到 orderBy默认排序是按照升序排序的
+            orderBy过滤器排序:{{ students | orderBy:'age' }}
+            此处等价于orderBy过滤器排序:{{ students | orderBy:'age' :false}}
+           orderBy第一个参数表示：参照什么条件进行排序
+                  第二个参数表示:按照什么进行排序，默认是false升序，true降序
+
+    -->
+    使用orderBy过滤器降序排序:{{ students | orderBy:'age':true}}
+
+    <!--
+            运行结果:
+            [{"name":"Fuck","age":33},
+            {"name":"Mexican","age":33},
+            {"name":"Mexican","age":25},
+            {"name":"Joker","age":22},
+            {"name":"Jacky","age":21},
+            {"name":"Ksea","age":18},
+            {"name":"Moxixi","age":12},
+            {"name":"Whysea","age":12}]
+
+    -->
+
+    使用orderBy过滤器按照name排序: {{ students | orderBy:'name'}}
+
+
+    使用orderBy过滤器先按照age排序如果age相等就按照name排序:{{ students | orderBy:['age','name']}}
+    <!--
+    运行结果:
+        [   {"name":"Moxixi","age":12},
+            {"name":"Whysea","age":12}, 此处我们就可以看到当age相同的时候就按照name进行排序的
+            {"name":"Ksea","age":18},
+            {"name":"Jacky","age":21},
+            {"name":"Joker","age":22},
+            {"name":"Mexican","age":25},
+            {"name":"Fuck","age":33},
+            {"name":"Mexican","age":33}
+
+            ]
+
+    -->
+
+</div>
+
+
+<script src="js/angular.min.js"></script>
+<script>
+    /*json过滤器*/
+    angular.module("jsonApp", []).controller("jsonController", function ($scope) {
+        //定义一个json对象
+        $scope.jsonObj = {
+            order: "1223",
+            customr: "322",
+            billInfo: [{name: "sss"}, {price: 23}]
+        }
+
+    });
+
+
+    /*
+     * 在angular中，默认只会加载一个ng-app
+     * 当需要模块需要加载多个ng-app的时候需要通过angular的手动启动
+     *  angular.bootstrap(document.getElementById("currencyApp"), ['currencyApp']);
+     *
+     * */
+
+    /*货币过滤器*/
+    angular.module("currencyApp", []).controller("currencyController", function ($scope) {
+        $scope.price = 23.023;
+    });
+    /*手动启动货币过滤器ng-app*/
+    angular.bootstrap(document.getElementById("currencyApp"), ['currencyApp']);
+
+
+    /*
+     * 时间过滤器
+     * */
+    angular.module("dateApp", []).controller("dateController", function ($scope) {
+        $scope.nowDate = new Date();
+    })
+    //手动启动时间过滤器
+    angular.bootstrap(document.getElementById("dateApp"), ['dateApp']);
+
+
+    /*
+     * filter过滤器
+     * */
+    angular.module("filterApp", []).controller("filterController", function ($scope) {
+        /*定义一个数组*/
+        $scope.colors = ["pink", "yellow", "blue", "orange", "grenn", "red"];
+
+        /*声明需过滤的变量*/
+        $scope.key = "r";
+
+        /*通过函数的方式来进行过滤*/
+        $scope.myFilter = function (color) {
+            //这里是过滤不是已o开头的颜色
+            return color.indexOf("o") > 0;
+        }
+
+    });
+    angular.bootstrap(document.getElementById("filterApp"), ["filterApp"]);
+
+
+    /*
+     * 字符串过滤器
+     *          lowercase
+     *          uppercase
+     * */
+    angular.module("strApp", []).controller("strController", function ($scope) {
+        $scope.msg = "Hello Wrold";
+    });
+    angular.bootstrap(document.getElementById("strApp"), ["strApp"]);
+
+
+    /**
+     * limitTo截取过滤器
+     */
+    angular.module("limitToApp", []).controller("limitToController", function ($scope) {
+        $scope.msg = "hello world";
+    })
+    angular.bootstrap(document.getElementById("limitToApp"), ["limitToApp"]);
+
+
+    /**
+     * 数字过滤器
+     *
+     * */
+    angular.module("numberApp", []).controller("numberController", function ($scope) {
+        $scope.num = 10000000.1286554321;
+
+    })
+    angular.bootstrap(document.getElementById("numberApp"), ["numberApp"]);
+
+
+    /*
+     * orderBy排序过滤器
+     * */
+
+    angular.module("orderByApp", []).controller("orderByController", function ($scope) {
+        $scope.students = [
+            {name: "Mexican", age: 33},
+            {name: "Jacky", age: 21},
+            {name: "Whysea", age: 12},
+            {name: "Ksea", age: 18},
+            {name: "Mexican", age: 25},
+            {name: "Fuck", age: 33},
+            {name: "Joker", age: 22},
+            {name: "Moxixi", age: 12}
+        ]
+    });
+
+    angular.bootstrap(document.getElementById("orderByApp"), ["orderByApp"]);
+
+</script>
+
+
+</body>
+</html>
