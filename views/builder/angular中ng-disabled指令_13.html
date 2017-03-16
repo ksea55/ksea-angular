@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div ng-app="disabledApp" id="disabled" ng-controller="disabledController" class="main">
+    在angular中要想禁用某个空间的状态是非常容易的，而非常灵活
+    angular通过指令ng-disabled来控制
+    true：禁用状态
+    false:激活状态
+
+    <input ng-disabled="isDisabled" placeholder="请输入你的内容"/>
+    <a href="#" ng-click="toggle()" class="btn btn-success">切换状态</a>
+
+</div>
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("disabledApp", []).controller("disabledController", function ($scope) {
+        $scope.isDisabled = true;//禁止
+        //定义该方法来切换其状态
+        $scope.toggle = function () {
+            $scope.isDisabled = !$scope.isDisabled;
+        }
+    })
+</script>
+</body>
+</html>
