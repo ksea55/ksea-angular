@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div id="runApp" ng-app="runApp" ng-controller="runController" class="main">
+    <h1>{{msg}}</h1>
+    <h1>{{child}}</h1>
+</div>
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("runApp", [])
+    //将根作用域注入进来
+        .run(function ($rootScope) { //.run(function ($rootScope,$scope)此处根作用域访问controller作用域是不可以的
+            console.log(this); //这里我们可以看到 this是window
+            console.log(arguments);
+            console.log($rootScope);
+            //通过根作用域访问变量
+            $rootScope.msg = "你好,$rootScope";
+        })
+        .controller("runController", function ($scope, $rootScope, $element) {
+            $scope.child = "你好,controller作用域";
+            $rootScope.msg = "在controller作用域中访问$rootScope作用域"; //此处说明在controller中是可以访问根作用域的
+            /*
+             * 这里的$element服务,获取容器元素,是一个jqlite对象
+             * 可以想jquery那样使用，设置样式，捕获子元素，链式调用等
+             * */
+            console.log($element);
+
+            $element.css({
+                background: "green",
+                height: "150px",
+                "margin-top":"150px"
+            })
+        })
+
+</script>
+</body>
+</html>
