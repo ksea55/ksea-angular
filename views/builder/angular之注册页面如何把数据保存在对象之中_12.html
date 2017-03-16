@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        #save {
+            width: 100%;
+        }
+
+        #messageInfo {
+            height: 30px;
+            text-align: center;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="container-fluid" ng-app="registerApp" ng-controller="registerController" id="registerApp">
+        <form class="form-horizontal" name="registerForm" id="registerForm">
+            <div class="text-center" style="font-size: 20px;font-family: 'Arial Narrow'; margin: 20px 20px">
+
+                跳羚科技注册
+
+            </div>
+            <div class="form-group">
+                <div class="col-xs-2">
+                    <label for="userName" class="control-label">用户名：</label>
+                </div>
+                <div class="col-xs-10">
+                    <input id="userName" name="userName" ng-model="user.userName" class="form-control"
+                           placeholder="请输入用户名" ng-required="true"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-2">
+                    <label for="tel" class="control-label">手机号：</label>
+                </div>
+                <div class="col-xs-10">
+                    <input id="tel" name="tel" ng-model="user.tel" ng-pattern="/^1[0-9]{10}$/"
+                           class="form-control" placeholder="请输入手机号码"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-2">
+                    <label for="email" class="control-label">邮箱：</label>
+                </div>
+                <div class="col-xs-10">
+                    <input id="email" name="email" ng-model="user.email"
+                           ng-pattern="/[0-9a-zA-Z]+@[0-9a-zA-Z]+\.[0-9a-zA-Z]+/"
+                           class="form-control" placeholder="请输入邮箱"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-2">
+                    <label for="address" class="control-label">地址：</label>
+                </div>
+                <div class="col-xs-10">
+                    <input id="address" name="address" ng-model="user.address" class="form-control"
+                           placeholder="请输入地址" ng-minlength="6" ng-maxlength="20"/>
+                </div>
+            </div>
+            <div id="messageInfo">
+                <span ng-show="registerForm.userName.$dirty && registerForm.userName.$invalid">请填写用户名!</span>
+                <span ng-show="registerForm.tel.$dirty && registerForm.tel.$invalid">手机号只能是1开头的11位数字号码！</span>
+                <span ng-show="registerForm.email.$dirty && registerForm.email.$invalid">邮箱格式不正确!正确格式如:abc@qq.com</span>
+                <span ng-show="registerForm.address.$dirty && registerForm.address.$invalid">信息地址字符在6-20个之间!</span>
+                <span ng-show="isSave">数据填写不完整,请核实!</span>
+            </div>
+            <div class="form-group">
+                <span id="save" class="btn btn-success" ng-click="save()">保&nbsp;存</span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("registerApp", []).controller("registerController", function ($scope) {
+
+        $scope.save = function () {
+            //判定表单提交时刻是否完整性
+            if ($scope.registerForm.$invalid) { //不合法
+                $scope.isSave = true;
+                return;
+            }
+
+            $scope.isSave = false;
+
+            //查看注入在ng-model指令中的user对象的数据信息
+            console.log($scope.user);
+            // 在控制台我们就可以看到该结果: Object {userName: "fdsfdsf", tel: "12121212211", email: "a@qq.com", address: "dsfdsfdsd"}
+
+        }
+
+    })
+</script>
+</body>
+</html>
