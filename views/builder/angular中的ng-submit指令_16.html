@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div id="submitApp" ng-app="submiApp" ng-controller="submitController" class="main">
+    <form ng-submit="save($event)">
+        <input ng-model="msg" placeholder="请输入内容" class="form-control"/>
+        <button type="submit" class="btn btn-success">保存</button>
+    </form>
+
+    总结:
+    通过案例知道，angular中的ng-submit主要用于来提交表单，其中mg-submit指令只能定义在 form中
+    并且需提交的按钮类型必须是submit(type="submit"),ng-submit指令的函数可以传递$event事件参数
+</div>
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("submiApp", []).controller("submitController", function ($scope) {
+        $scope.save = function (e) {
+            console.log(e);
+            console.log(this);
+            console.log(arguments);
+        }
+    })
+</script>
+</body>
+</html>
