@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div id="checkedApp" ng-app="checkedApp" ng-controller="checkedController" class="main">
+    在angular中通过ng-checked指令，非常便捷的来控制
+    checkbox radio是否呗选中
+    true:选中
+    false:未选中
+
+    <label>篮球</label>
+    <input type="checkbox" ng-checked="isChecked"/>
+
+    <a href="#" class="btn btn-success" ng-click="checked()">点击</a>
+
+</div>
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("checkedApp", []).controller("checkedController", function ($scope) {
+        $scope.isChecked = true;
+        $scope.checked = function () {
+            $scope.isChecked = !$scope.isChecked;
+        }
+    })
+</script>
+</body>
+</html>
