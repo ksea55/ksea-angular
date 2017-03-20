@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <style type="text/css">
+        #result1, #result2, #result3, #result4 {
+            width: 80px;
+            height: 80px;
+        }
+
+        .red {
+            background: red;
+        }
+
+        .green {
+            background: green;
+        }
+
+        .fontWhite {
+            font-size: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div id="styleApp" ng-app="styleApp" ng-controller="styleController" class="main">
+    <button class="btn btn-success" ng-click="changeColor()">摇骰子</button>
+    <!--在angular中ng-style指令值是对象的情况 这里使用的三目运算-->
+    <div id="result1" ng-style="{background: num<4?'red':'green'}">5</div>
+    <!--使用变量值，其变量值也必须是对象-->
+    <div id="result2" ng-style="myStyle">back</div>
+
+
+</div>
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("styleApp", []).controller("styleController", function ($scope) {
+        $scope.changeColor = function () {
+            //求1-6之间的随机数并向上取整
+            $scope.num = Math.ceil(Math.random() * 6);
+
+        }
+
+        //在这里定义的变量也必须是对象值
+        $scope.myStyle = {
+            background: 'red',
+            fontSize: '20px',
+            color: 'white'
+        }
+    })
+</script>
+</body>
+</html>
