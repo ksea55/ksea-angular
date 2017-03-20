@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <style type="text/css">
+        #result1, #result2, #result3, #result4 {
+            width: 80px;
+            height: 80px;
+        }
+
+        .red {
+            background: red;
+        }
+
+        .green {
+            background: green;
+        }
+
+        .fontWhite {
+            font-size: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div id="classApp" ng-app="classApp" ng-controller="classController" class="main">
+    <button class="btn btn-success" ng-click="changeColor()">摇骰子</button>
+    <!--在ng指令中可以直接访问变量，这里是当num的值小于4就保留red类样式，当num>=4就保留green类样式-->
+    <div id="result1" ng-class="{red:num<4,green:num>=4}">{{num}}</div>
+    <br/>
+    <!--这里我们也可以同时使用多个类样式空格隔开，那么我们可以看到这个div字体是白色-->
+    <div id="result2" ng-class="{red:num<4,'green fontWhite':num>=4}">{{num}}</div>
+    <br/>
+    <!--在ng-class指令中我们也可以用字符串 并且多个类样式中间用空格隔开-->
+    <div id="result3" ng-class="'red fontWhite'">3</div>
+    <br/>
+    <!--
+        ng-class中也可以使用数组
+    -->
+    <div id="result4" ng-class="[myColor,'blue']">6</div>
+
+    <br/>
+
+
+</div>
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("classApp", []).controller("classController", function ($scope) {
+        $scope.changeColor = function () {
+            //求1-6之间的随机数并向上取整
+            $scope.num = Math.ceil(Math.random() * 6);
+
+        }
+
+        //在变量中多个类样式空格隔开
+        $scope.myColor = "red fontWhite";
+    })
+</script>
+</body>
+</html>
