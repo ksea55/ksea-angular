@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ng-app指令标记了AngularJS脚本的作用域，
+在<html>中添加ng-app属性即说明整个<html>都是AngularJS脚本作用域。
+开发者也可以在局部使用ng-app指令，如<div ng-app>，则AngularJS脚本仅在该<div>中运行。
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div id="hrefApp" ng-app="hrefApp" ng-controller="hrefController" class="main">
+    <a href="{{site}}">百度</a><br/>
+    <a ng-href="{{ng_site}}">ng-百度</a>
+</div>
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("hrefApp", []).controller("hrefController", function ($scope, $timeout) {
+        // $scope.site = "www.baidu.com"; //这里使用原生href不能动态渲染，在点击连接地址不对
+        //$scope.ng_site = "www.baidu.com";//这样也不行
+
+        $timeout(function () {
+            $scope.site = "www.baidu.com";
+            $scope.ng_site = "www.baidu.com";
+            console.log("1111");
+        }, 1000);
+    })
+</script>
+</body>
+</html>
