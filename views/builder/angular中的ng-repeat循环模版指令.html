@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        .red{
+            background: red;
+        }
+        .yellow{
+            background: yellow;
+        }
+        .green{
+            background: green;
+        }
+        .pink{
+            background: pink;
+        }
+    </style>
+</head>
+<body>
+<div id="repeatApp" ng-app="repeatApp" ng-controller="repeatController">
+    <ul>
+        <!--
+             ng-required="color in colors"语法 跟java中的foreach差不多
+             for(String color:colors)
+             此处就跟jsp中的循环标签一样
+        -->
+        <!--
+            red:$first将第一行背景色改变 选择red类样式
+            yellow:$last 将最后一行背景色改变 选择yellow类样式
+            green:$odd 奇数行背景色改变 选择green类样式
+            pink:$even 偶数行背景色改变 选择pink类样式
+        -->
+        <li ng-repeat="color in colors" ng-class="{red:$first,yellow:$last,green:$odd}">
+            {{color}} <!--获取循环标量的值-->
+            $index-{{$index}}<!--$index变量循环列表的索引-->
+            $first-{{$first}}<!--$first变量表示是否是第一个元素的循环，返回一个boolean值-->
+            $last-{{$last}}<!--$last变量表示是否是最后一个元素的循环，返回一个boolean值-->
+            $middle-{{$middle}}<!--$middle变量表示是否是中间元素，返回一个boolean值-->
+            $odd-{{$odd}}<!--$odd变量表示是否是奇数行,返回boolean值-->
+            $even-{{$even}}<!--$even变量表示是否是偶数行,返回boolean值-->
+        </li>
+    </ul>
+</div>
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("repeatApp", []).controller("repeatController", function ($scope) {
+        //定义循环的模版数组
+        $scope.colors=["yellow","green","blue","pink","red","gray","pulple"]
+    });
+</script>
+</body>
+</html>
