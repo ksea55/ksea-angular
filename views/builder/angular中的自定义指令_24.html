@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div ng-app="definedApp">
+
+    <my-title></my-title> <!--这种属于E（Element）元素类型-->
+    <div my-title></div> <!--这种就属于A(attribute)属性类型-->
+    <div class="my-title"></div> <!--这个就是通过我们在restrict中指定类型C来显示的-->
+</div>
+
+
+<script src="js/angular.min.js"></script>
+<script>
+    var app = angular.module("definedApp", []);
+    /*
+     * angular中自定义指令通过console.log(app)
+     * 就可以看到其参数，其主要使用directive来操作
+     * 第一个参数，是指定自定义指令的name，该name必须是驼峰命名规则
+     * 第二个参数，是一个函数，指令工厂函数，没有参数
+     * 作用于是全局作用域，返回值是描述指令的对象
+     *
+     * 在angular中一共有四种自定义指令的形式 ECMA
+     * Restrict表示指令的类型
+     *      E表示自定义元素类型(Element)  默认形式
+     *            例如<my-title></my-title>我们这里的自定义指令
+     *      C表示类类型(Class)
+     *            例如<div class="ng-hide"></div>
+     *     M 表示注释类型(comment)这个用的很少
+     *            例如<!-- directive:my-title -->
+     *    A表示自定义属性类型(attribute) 默认形式
+     *            例如<div ng-if="isShow"></div>
+     *
+     *   注意:ECMA这四种类型，其字母都是大写的可以组合使用
+     * */
+    app.directive("myTitle", function () {
+        return {
+            //指定类型
+            restrict: "ECA",
+            //指定指令的模版内容，这里的模版会渲染到自定义指令中
+            template: "<h1>你好啊, 自定义指令 </h1>"
+            // templateUrl:"url 地址" 该指令通过加载模版
+        }
+    })
+</script>
+</body>
+</html>
