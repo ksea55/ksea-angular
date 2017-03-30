@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+<!--
+=修饰符主要是解决作用域分离的时候，子作用域使用父作用域中数据的问题
+第一步：在指令容器元素中绑定数据(此时不要使用插值语法) 如:my-title="title" my-msg="msg"
+第二步：在scope对象中定义该属性，属性值要使用=修饰符 如:scope: { title: "=myTitle",msg: "=myMsg" }
+       属性名称是子作用域中使用的变量
+       属性值绑定的自定义指令元素上的属性名称
+     这种方式绑定的作用数据是双向绑定的，子作用域数据修改会影响父作用域数据，父作用域数据修改会影响子作用域
+     此时父作用域与子作用域是相互独立的
+     子作用域中的数据会覆盖父作用域中的数据
+-->
+</head>
+<body>
+<div ng-app="scopeApp" ng-controller="scopeController">
+    <input type="text" placeholder="请输入内容" ng-model="msg"/>
+    <h1>{{title}}-{{msg}}</h1> <!--angular作用域，这里是自定义作用域的父作用域-->
+    <br/>
+
+    <div my-show my-title="title" my-msg="msg"></div> <!--这里是自定义作用域并通过模版的方式template-->
+</div>
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("scopeApp", [])
+        .controller("scopeController", function ($scope) {
+            console.log("parentScope", $scope);
+            $scope.title = "parentTitle";
+            $scope.msg = "parent";
+        })
+        .directive("myShow", function () {
+            return {
+                template: "<h1>{{title}}-{{msg}}</h1>",
+                controller: function ($scope) {
+                    console.log("childScope", $scope);
+                    $scope.title = "childTitle";
+                    $scope.msg = "child";
+                },
+
+                scope: {
+                    title: "=myTitle",
+                    msg: "=myMsg"
+                }
+            }
+        })
+</script>
+</body>
+</html>
