@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div ng-app="scopeApp" ng-controller="scopeController">
+    <input type="text" placeholder="请输入内容" ng-model="msg"> <!--这里的msg 是angular中的作用域来实现双向绑定-->
+    <br/>
+    <!--自定义属性指令-->
+    <div my-show="3232"></div>
+</div>
+
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("scopeApp", [])
+        .controller("scopeController", function ($scope) {
+
+        })//自定义指令,名称必须是驼峰命名
+        .directive("myShow", function () {
+            return {
+                //定义返回的模版内容
+                template: "<h1>{{myTitle}}-{{msg}}</h1>",
+                controller: function ($scope, $element, $attrs) {//定义自定义作用域，也是通过注入
+                    /*$scope表示作用域
+                     $element 表示获取的自定义指令容器元素的jqlite对象
+                     $attrs自定义指令容器的服务
+                     元素上每一个属性会转换成一个驼峰式命名法
+                     $attr是一个驼峰命名语法属性名称映射关系对象
+                     有一类属性比较特殊，是以data为前最的属性名称，只会保留后面的
+                     如data-title则只会保留title
+
+                     *
+                     * 这三个是非常常用的属性
+                     * */
+
+                    $scope.myTitle = "k.sea√"; //自定义作用域声明变量
+                    console.log(this);
+                    console.log(arguments);
+
+                    //通过$element操作jqlite对象，跟jquery用法一致
+                    $element.css("color", "green");//将字体颜色改变成绿色
+                    console.log($element);
+                    console.log($attrs);
+                    console.log($attrs.$attr.myShow); //这里就打印的是my-show指令
+                    console.log($attrs.myShow);//这里就打印的是3232  my-show="3232"的值  从这里我就可以看到其实在内部它是将其转换成驼峰了
+                }
+            }
+        })
+</script>
+</body>
+</html>
