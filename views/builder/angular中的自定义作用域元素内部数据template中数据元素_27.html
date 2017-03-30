@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+<div ng-app="scopeApp" ng-controller="scopeController">
+    <input type="text" placeholder="请输入内容" ng-model="msg"/>
+    <h1>{{title}}-{{msg}}</h1> <!--angular作用域，这里是自定义作用域的父作用域-->
+    <br/>
+    <div my-show></div> <!--这里是自定义作用域并通过模版的方式template-->
+</div>
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("scopeApp", [])
+        .controller("scopeController", function ($scope) {
+            console.log("parentScope", $scope);
+            $scope.title = "parentTitle";
+            $scope.msg = "parent";
+        })
+        .directive("myShow", function () {
+            return {
+                template: "<h1>{{title}}-{{msg}}</h1>",
+                controller: function ($scope) {
+                    console.log("childScope", $scope);
+                    $scope.title = "childTitle";
+                    $scope.msg = "child";
+                },
+                /*指定作用域是false，这也是默认的情况
+                 * 当scope的值为false的时候，父作用域与子作用域公用的是一个作用域
+                 * 后面的内容会覆盖前面的
+                 * */
+                // scope: false
+                /*
+                 * 指定作用域是true的时候，父作用域与子作用域是独立分开的，在彼此的作用域的数据信息不受感受
+                 * 如这里的
+                 * $scope.title = "parentTitle";$scope.msg = "parent";
+                 * $scope.title = "childTitle"; $scope.msg = "child";
+                 * 彼此不受影响
+                 * */
+               //  scope: true
+                /*
+                 * 指定作用域是{}对象的是情况，其情况与scope:true一致
+                 * */
+                scope: {}
+            }
+        })
+</script>
+</body>
+</html>
