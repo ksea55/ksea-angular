@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div ng-app="linkApp" ng-controller="linkController">
+    <!--
+        自定义属性指令,repeat-num="3" 意思说，让<h1>重复三次
+    -->
+
+      <div repeat-num="3"><h1> 你好,angular js！</h1></div>
+</div>
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("linkApp", [])
+        .controller("linkController", function ($scope) {
+        })
+        .directive("repeatNum", function () {
+            return {
+                //定义类型
+                restrict: "A",
+                controller: function ($scope) {
+
+                    $scope.msg = "hello_";
+                },
+                link: function (scope, jqlite, attrs) {
+
+                    console.log(this);
+                    console.log(scope);
+
+                    //获取自定义元素指令中的值
+                    var num = attrs.repeatNum;
+                    //获取元素
+                    var dom = jqlite.children();
+
+                    for (var i = 0; i < num; i++) {
+                        //克隆原有数据
+                        var child = dom.clone();
+                        console.log(jqlite, child);
+                        //将元素追加到dom上
+                        jqlite.append(child);
+                    }
+
+                }
+            }
+        })
+</script>
+</body>
+</html>
