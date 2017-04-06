@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div ng-app="ngshowApp" ng-controller="ngshowController">
+    <div my-show="isShow">你是否了解过angular的ng-show的指令</div>
+</div>
+
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("ngshowApp", [])
+        .controller("ngshowController", function ($scope, $timeout) {
+            //定义数据
+            $scope.isShow = true;
+            //定时改变数据结果
+            $timeout(function () {
+                $scope.isShow = !$scope.isShow;
+            }, 3000);
+        })//定义自定义指令my-show
+        .directive("myShow", function () {
+            return {
+                //指明是属性类型指令
+                restrict: "A",
+                //定义编译函数
+                link: function (scope, jqlite, attrs) {
+                    //监听属性值的变化
+                    scope.$watch(attrs.myShow, function (newValue, oldValue, scope) {
+                        //这里根据newValue来是否显示
+                        if (newValue){
+                            jqlite.css("display","block");
+                        }else{
+                            jqlite.css("display","none");
+
+                        }
+                    })
+                }
+            }
+        })
+</script>
+</body>
+</html>
