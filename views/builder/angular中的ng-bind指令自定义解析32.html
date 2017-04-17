@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div ng-app="myBindApp" ng-controller="myBindController">
+    <input type="text" placeholder="请输入内容" ng-model="msg" class="control-label"/>
+    <h1 my-bind="msg"></h1> <!--自定义属性指令my-bind 将自动监控msg的信息并插入到H1标签中-->
+</div>
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("myBindApp", [])
+        .controller("myBindController", function ($scope) {
+            //给msg绑定初始值
+            $scope.msg = "ng-bind源码分析";
+        })
+        .directive("myBind", function () {
+            return {
+                //指定其指令为属性指令
+                restrict: "A",
+                //定义编译函数
+                link: function (scope, element, attrs) {
+                    //监听myBind属性值的变化，根据变化的值，向容器元素中插入只
+                    scope.$watch(attrs.myBind, function (newValue, oldValue, childScope) {
+                        //将新值插入到容器元素中
+                        element.html(newValue);
+                    })
+                }
+            }
+        });
+</script>
+</body>
+</html>
