@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        .red {
+            color: red;
+        }
+
+        .font-60 {
+            font-size: 60px;
+        }
+
+        .blue {
+            color: blue;
+        }
+
+        .font-40 {
+            font-size: 40px;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .bg-yellow {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+<div ng-app="myClassApp" ng-controller="myClassController">
+    <!--这里插入的是字符串类型的 class类样式-->
+    <h1 my-class="'red font-60'">这里插入的是字符串类型的 class类样式</h1>
+    <h1 my-class="clz">这里是使用的是一个数组对象</h1>
+    <h1 my-class="clzObj">这里是传递的是一个对象</h1>
+    <h1 my-class="clzVar">这里是传递的变量值</h1>
+
+</div>
+
+<script src="js/angular.min.js"></script>
+<script>
+    /*Compile编译方法跟link一样都是在指令编译时执行
+     * 区别在于:
+     *   Link是编译的一个子过程
+     *   compile是编译的全过程
+     *         属性值也是函数,函数的返回值就是link方法
+     *         Compile是从指令获取到指令编译完成全部的过程
+     *         它有两个参数
+     *             第一个参数表示指令容器元素
+     *             第二个参数表示attrs属性对象
+     *          作用域是指令的描述对象
+     *          返回值是link方法
+     *             参数学习三个
+     *                  第一个表示作用域
+     *                  第二个表示指令容器元素
+     *                  第三个表示属性对象
+     *             作用域是全局作用域
+     *
+     *     作用域在compile中访问不到，但是在compile返回值函数中可以访问到，因此作用域是在compile执行完毕之后
+     *     link方法执行之前创建的
+     *
+     *
+     * */
+    angular.module("myClassApp", [])
+        .controller("myClassController", function ($scope) {
+            //定义数组
+            $scope.clz = ['blue', 'font-40'];
+            //定义对象
+            $scope.clzObj = {
+                'green': true,//true保留
+                'bg-yellow': false
+
+            }
+            //定义一个变量
+            $scope.clzVar = "red bg-yellow";//变量可以是任意值
+        })
+        .directive("myClass", function () {
+
+            return {
+                //指定其指令是什么类型
+                restrict: "A",
+                //定义模版
+                template: "<span>ksea自定义模版信息</span>",
+                //定义作用域
+                constructor: function ($scope) {
+
+                },
+                //编译全过程
+                compile: function (element, attrs) {
+
+                    //查看compile信息
+                    console.log(this);
+                    console.log(arguments);
+
+                    //这里必须要有返回值,其返回值就是link的编译方法
+                    return function (scope, element, attrs) {
+                        console.log("link", this);
+                        console.log("link", arguments);
+
+
+                        //开始根据属性值添加class类样式，监听属性值的变化
+                        scope.$watch(attrs.myClass, function (newValue, oldValue, childScope) {
+                            //打印当前值
+                            console.log(newValue);
+
+                            //如果当前值传入的是string类型
+                            if (typeof  newValue === "string") { //这是判断字符串类型的一种方式
+
+                                element[0].className = newValue;//为当前元素添加类样式
+                            } else if (newValue instanceof Array) {//判定当前元素是否是数组类型
+                                element[0].className = newValue.join(" ");
+                            } else if (Object.prototype.toString.call(newValue) == "[object Object]") {
+                                /** 判断是否对象类型
+                                 Object.prototype.toString.call({})
+                                 "[object Object]"
+                                 //判断是否是数组类型
+                                 Object.prototype.toString.call([])
+                                 "[object Array]"
+                                 //判断是否是函数类型
+                                 Object.prototype.toString.call(function(){})
+                                 "[object Function]"
+                                 */
+
+                                var result = "";
+
+                                //遍历对象
+                                for (var obj in newValue) {
+                                    //判断该对象的值是否是true
+                                    if (newValue[obj]) {
+                                        result += " " + obj;
+                                    }
+                                }
+
+                                element[0].className = result.slice(1);
+
+
+                            }
+
+
+                        })
+                    }
+                }
+
+            }
+        })
+</script>
+</body>
+</html>
