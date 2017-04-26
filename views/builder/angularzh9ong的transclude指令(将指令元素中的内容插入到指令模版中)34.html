@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div ng-app="transcludeApp" ng-controller="transcludeController">
+    <my-time>
+        当前时间是:
+    </my-time>
+</div>
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("transcludeApp", [])
+        .controller("transcludeController", function ($scope) {
+
+        })
+        .directive("myTime", function () {
+            return {
+                //定义为元素类型
+                restrict: "E",
+                transclude: true,
+                /*
+                * <div ng-transclude></div> 这里就将我们的<my-time>元素里面的内容给插入进来了
+                * */
+                template: "<div><div ng-transclude></div><h1>{{time}}</h1> </div>",
+                controller: function ($scope) {
+                    var date = new Date();
+                    $scope.time = "当前北京时间点是:" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                }
+            }
+        })
+
+</script>
+</body>
+</html>
