@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<div ng-app="definedApp" ng-controller="definedController">
+    <input type="text" class="form-control" placeholder="请输入内容.." ng-model="msg"/>
+    <!--<h1 ksea-bind="msg"></h1>-->
+    <div ksea-repeat="8">
+        <h1 ksea-bind="msg"></h1>
+    </div>
+</div>
+
+
+<script src="js/angular.min.js"></script>
+<script>
+    angular.module("definedApp", [])
+        .controller("definedController", function ($scope) {
+            $scope.msg = "ksea";
+        })
+        .directive("kseaRepeat", function () {
+            return {
+                restrict: "A",
+                transclude: true,
+                template: "<div><div ng-repeat='item in data' ng-transclude></div> </div>",
+                /*controller: function ($scope) {
+                 $scope.data = [1, 2, 3, 4];
+                 }*/
+                link: function (scope, element, attrs) {
+                    //获取元素值，根据元素值，创建对应个数的数组
+                    var num = attrs.kseaRepeat;
+                    /*根据num创建数组
+                     * 这里的+num会把一个字符串转换成整型
+                     *new Array(+num).fill(1)返回一个[1, 1, 1, 1, 1]的数组
+                     *  var data = new Array(+num).fill(1).map(function (value, index) {
+                     return index;
+                     }) 返回一个[0, 1, 2, 3, 4]的数组这个是将index作为元素的值
+                     * */
+
+                    var data = new Array(+num).fill(1).map(function (value, index) {
+                        return index;
+                    });
+                    //遍历数组
+                    data.forEach(function (value, index) {
+                        console.log(value + "--" + index);
+                    })
+                    console.log(data);
+
+                    //对其赋值
+                    scope.data = data;
+                }
+
+
+
+                /* link: function (scope, element, attrs) {
+                 //获取属性值
+                 var num = attrs.kseaRepeat;
+                 //获取子元素
+                 var dom = element.children();
+                 //遍历num 添加元素
+                 for (var i = 0; i < num; i++) {
+                 //克隆子元素
+                 var child = dom.clone();
+                 //添加元素
+                 element.append(child);
+                 }
+                 }*/
+            }
+        })
+        .directive("kseaBind", function () {
+            return {
+                restrict: "A",
+                link: function (scope, element, attrs) {
+                    //监听属性值
+                    scope.$watch(attrs.kseaBind, function (newValue, oldValue, childScope) {
+                        element.html(newValue);
+                    })
+                }
+            }
+        })
+</script>
+</body>
+</html>
