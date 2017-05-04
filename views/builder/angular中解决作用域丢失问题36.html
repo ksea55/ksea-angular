@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body ng-app="rootApp">
+
+<h1>{{date}}</h1>
+<h1>{{msg1}}</h1>
+<h1>{{msg2}}</h1>
+<h1>{{apply1}}</h1>
+<h1>{{apply2}}</h1>
+
+<h1>{{apply11}}</h1>
+<h1>{{apply12}}</h1>
+<h1>{{apply13}}</h1>
+<script src="js/angular.min.js"></script>
+<script>
+    /**
+     * 服务
+     *    是给控制器使用的(这一类服务是需要参数注入的)
+     *    服务是在js中使用的
+     *    服务就是封装的一组功能
+     *    $timeout服务，封装了setTimeout方法，实现其定时功能
+     *
+     *作用域丢失
+     *    在作用域中绑定新的数据，没有渲染到页面中，此时产生的问题就叫作用域丢失
+     *
+     * */
+    angular.module("rootApp", [])
+    /*run方法不是一个控制器，用于访问跟作用域*/
+        .run(function ($rootScope, $timeout) {
+
+            /*这里用原生的setTimeout来进行定时，此刻页面渲染不出来这种情况就造成了作用域丢失的情况*/
+            /*setTimeout(function () {
+             $rootScope.date = "2017-05-04";
+             }, 1000);*/
+
+            //第一种解决方案,使用是$timeout
+            $timeout(function () {
+                $rootScope.date = "2017-05-04";
+            }, 1000);
+
+            console.log($rootScope);
+            /*第二种解决方案
+             * 这种方案就是在使用作用域上的$diget()方法
+             * $rootScope.$digest();来进行作用域丢失检测
+             * 它只能检测方法之前的，方法之后的不能
+             * 也就是msg1最终能显示 msg2最终不能显示
+             * */
+            setTimeout(function () {
+                $rootScope.msg1 = "msg1";
+                $rootScope.$digest();
+                $rootScope.msg2 = "msg2";
+            }, 1000);
+
+            /*第三种方式:
+             $apply()其封装了$diget()其结果一样
+             */
+            setTimeout(function () {
+                $rootScope.apply1 = "apply1";
+                $rootScope.$apply();
+                $rootScope.apply2 = "apply2";
+            }, 1000);
+
+            /*第四种方式:
+            * 使用apply()的回调函数 其回调之前与回调函数之类的会呗显示
+            * */
+            setTimeout(function () {
+                $rootScope.apply11 = "apply11";
+                $rootScope.$apply(function () {
+                    $rootScope.apply13 = "apply13";
+                });
+
+                $rootScope.apply12 = "apply12";
+            }, 1000);
+        })
+</script>
+</body>
+</html>
