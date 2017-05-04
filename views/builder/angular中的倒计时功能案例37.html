@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>base page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body ng-app="timeApp">
+
+<h1>
+    距离活动结束还剩:
+    <span ng-bind="day"></span>天
+    <span ng-bind="hour"></span>时
+    <span ng-bind="minute"></span>分
+    <span ng-bind="sencod"></span>秒
+</h1>
+
+<script src="js/angular.min.js"></script>
+<script>
+    //截至日期,并获取截至日期的时间戳
+    var uptoDate = new Date("2017-05-06").getTime();
+    angular.module("timeApp", [])
+        .run(function ($rootScope, $interval) {
+
+            function time() {
+
+                //当前日期，并获取当前日期的时间戳
+                var currDate = new Date().getTime();
+                //计算出剩余的时间戳时间
+                var resultDate = uptoDate - currDate;
+
+                //获取当前剩余的秒
+                var sencod = resultDate / 1000;
+                var minute = sencod / 60;
+                var hour = minute / 60;
+                var day = hour / 24;
+
+                $rootScope.sencod = (sencod % 60).toFixed(1);
+                $rootScope.minute = parseInt(minute % 60);
+                $rootScope.hour = parseInt(hour % 24);
+                $rootScope.day = parseInt(day);
+            }
+
+            time();
+
+            $interval(function () {
+                time();
+            }, 100);
+        });
+
+
+</script>
+</body>
+</html>
